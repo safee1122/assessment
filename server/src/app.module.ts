@@ -14,7 +14,7 @@ const envFilePath: string = getEnvPath(`${__dirname}/common/envs`);
 @Module({
   imports: [
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'public'),
+      rootPath: join(__dirname, '..', 'build'),
       exclude: ['/api/(.*)'],
     }),
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),

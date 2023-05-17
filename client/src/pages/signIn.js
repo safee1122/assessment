@@ -1,17 +1,15 @@
 import * as React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { login } from "../slices/authSlice";
+import { useSelector } from "react-redux";
 
 import { Link as RouterLink } from "react-router-dom";
 import { Container, Typography, Link, Box, Divider } from "@mui/material";
 import { motion } from "framer-motion";
 import Cookies from "js-cookie";
-import { useFormik } from "formik";
-import { LoginSchema } from "../utils/validationUtils";
 import styled from "@emotion/styled";
 import SigninForm from "../components/signinForm";
+import { toast } from "react-toastify";
 //////////////////////////////////
 const RootStyle = styled("div")({
   background: "rgb(249, 250, 251)",
@@ -54,12 +52,16 @@ const fadeInUp = {
 function SignIn() {
   const token = Cookies.get("token");
   const navigate = useNavigate();
+  const error = useSelector((state) => state.auth.error);
 
   React.useEffect(() => {
     if (token) {
       navigate("/");
     }
   }, []);
+  React.useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
 
   return (
     <>

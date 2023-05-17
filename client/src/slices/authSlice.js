@@ -1,20 +1,33 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { authService } from "../services/authService";
-import { clearError, setError, setLoading } from "./appSlice";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 // Async thunks for login and register
 
 export const login = createAsyncThunk("auth/login", async (credentials) => {
-  const response = await authService.login(credentials);
-  Cookies.set("token", response?.token); // Save token in a cookie
-  localStorage.setItem("userInfo", JSON.stringify(response?.user)); // Save user data in local Storage
-  return response.data;
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_URL}auth/login`,
+      credentials
+    );
+    Cookies.set("token", response?.token); // Save token in a cookie
+    localStorage.setItem("userInfo", JSON.stringify(response?.user)); // Save user data in local Storage
+    return response.data;
+  } catch (error) {
+    throw new Error("Invalid username or password");
+  }
 });
 
 export const register = createAsyncThunk("auth/register", async (userInfo) => {
-  const response = await authService.register(userInfo);
-  return response.data;
+  try {
+    const response = await axios.post(
+      `${process.env.REACT_APP_URL}auth/register`,
+      userInfo
+    );
+    return response.data;
+  } catch (error) {
+    throw new Error("Registration failed");
+  }
 });
 
 // Auth slice
@@ -22,6 +35,8 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     user: JSON.parse(localStorage.getItem("userInfo")) || false,
+    loading: false,
+    error: null,
   },
   reducers: {
     logout(state) {
@@ -32,30 +47,30 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(login.pending, () => {
-        setLoading(true);
-        clearError();
+      .addCase(login.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        setLoading(true);
-        clearError();
+        state.loading = false;
+        state.error = null;
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
-        setLoading(true);
-        setError(action.error.message);
+        state.loading = false;
+        state.error = action.error.message;
       })
-      .addCase(register.pending, () => {
-        setLoading(true);
-        clearError();
+      .addCase(register.pending, (state) => {
+        state.loading = true;
+        state.error = null;
       })
       .addCase(register.fulfilled, (state) => {
-        setLoading(true);
-        clearError();
+        state.loading = false;
+        state.error = null;
       })
       .addCase(register.rejected, (state, action) => {
-        setLoading(true);
-        setError(action.error.message);
+        state.loading = false;
+        state.error = action.error.message;
       });
   },
 });

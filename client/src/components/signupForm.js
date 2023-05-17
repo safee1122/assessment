@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useFormik, Form, FormikProvider } from "formik";
 import { useNavigate } from "react-router-dom";
 import {
@@ -13,7 +13,8 @@ import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { SignupSchema } from "../utils/validationUtils";
 import { register } from "../slices/authSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -30,6 +31,7 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
+  const error = useSelector((state) => state.auth.error);
 
   const formik = useFormik({
     initialValues: {
@@ -46,7 +48,9 @@ const SignupForm = () => {
   });
 
   const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
-
+  React.useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
   return (
     <FormikProvider value={formik}>
       <Form autoComplete="off" noValidate onSubmit={handleSubmit}>

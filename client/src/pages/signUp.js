@@ -4,6 +4,9 @@ import styled from "@emotion/styled";
 
 import { motion } from "framer-motion";
 import SignupForm from "../components/signupForm";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import React from "react";
 
 //////////////////////////////////
 const RootStyle = styled("div")({
@@ -43,8 +46,11 @@ const fadeInUp = {
     },
   },
 };
-
-function SignUp({ setAuth }) {
+function SignUp() {
+  const error = useSelector((state) => state.auth.error);
+  React.useEffect(() => {
+    if (error) toast.error(error);
+  }, [error]);
   return (
     <>
       <RootStyle>

@@ -14,31 +14,34 @@ import Loader from "./components/loader";
 import { useSelector } from "react-redux";
 import Home from "./pages/home";
 import ProtectedRoute from "./components/protectedRoute";
-import Cookies from "js-cookie";
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 function App() {
   const loading = useSelector((state) => state.app.loading);
 
   return loading ? (
     <Loader />
   ) : (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Router>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute redirectPath={"/login"}>
-                <Home />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<SignIn />} />
-          <Route path="/register" element={<SignUp />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Router>
-    </ErrorBoundary>
+    <>
+      <ErrorBoundary FallbackComponent={ErrorFallback}>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute redirectPath={"/login"}>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/login" element={<SignIn />} />
+            <Route path="/register" element={<SignUp />} />
+            <Route path="*" element={<NotFoundPage />} />
+          </Routes>
+        </Router>
+      </ErrorBoundary>
+      <ToastContainer />
+    </>
   );
 }
 

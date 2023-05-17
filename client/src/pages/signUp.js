@@ -64,7 +64,7 @@ function SignUp({ setAuth }) {
               {...fadeInUp}
             ></Divider>
 
-            <SignupForm setAuth={setAuth} />
+            <SignupForm />
 
             <Typography
               component={motion.p}
@@ -92,7 +92,7 @@ function SignUp({ setAuth }) {
               sx={{ mt: 3 }}
             >
               Have an account?{" "}
-              <Link variant="subtitle2" component={RouterLink} to="/">
+              <Link variant="subtitle2" component={RouterLink} to="/login">
                 Login
               </Link>
             </Typography>

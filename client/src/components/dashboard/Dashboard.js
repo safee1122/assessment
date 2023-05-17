@@ -24,6 +24,7 @@ import Deposits from "./Deposits";
 import Orders from "./Orders";
 import { logout } from "../../slices/authSlice";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
 function Copyright(props) {
   return (
@@ -93,6 +94,7 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -131,7 +133,7 @@ function DashboardContent() {
             </Typography>
             <IconButton
               onClick={() => {
-                logout();
+                dispatch(logout());
                 navigate("/login");
               }}
               color="inherit"

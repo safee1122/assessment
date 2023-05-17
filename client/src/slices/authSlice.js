@@ -7,8 +7,8 @@ import Cookies from "js-cookie";
 
 export const login = createAsyncThunk("auth/login", async (credentials) => {
   const response = await authService.login(credentials);
-  Cookies.set("token", response?.data?.token); // Save token in a cookie
-  localStorage.setItem("userInfo", JSON.stringify(response?.data)); // Save user data in local Storage
+  Cookies.set("token", response?.token); // Save token in a cookie
+  localStorage.setItem("userInfo", JSON.stringify(response?.user)); // Save user data in local Storage
   return response.data;
 });
 

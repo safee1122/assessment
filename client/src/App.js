@@ -13,6 +13,8 @@ import ErrorFallback from "./components/errorFallBack";
 import Loader from "./components/loader";
 import { useSelector } from "react-redux";
 import Home from "./pages/home";
+import ProtectedRoute from "./components/protectedRoute";
+import Cookies from "js-cookie";
 
 function App() {
   const loading = useSelector((state) => state.app.loading);
@@ -23,7 +25,14 @@ function App() {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Router>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute redirectPath={"/login"}>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/login" element={<SignIn />} />
           <Route path="/register" element={<SignUp />} />
           <Route path="*" element={<NotFoundPage />} />

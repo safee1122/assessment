@@ -11,7 +11,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../slices/authSlice";
+import Cookies from "js-cookie";
 function SignIn() {
+  const token = Cookies.get("token");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [email, setEmail] = useState("");
@@ -34,19 +36,19 @@ function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
     dispatch(
       login({
         email: data.get("email"),
         password: data.get("password"),
       })
     );
+    navigate("/");
   };
-
+  React.useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
+  }, []);
   return (
     <Container component="main" maxWidth="sm">
       <Box

@@ -11,9 +11,9 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
-import { LoginSchema, SignupSchema } from "../utils/validationUtils";
-import { login, register } from "../slices/authSlice";
-import { useDispatch } from "react-redux";
+import { LoginSchema } from "../utils/validationUtils";
+import { login } from "../slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
@@ -31,7 +31,8 @@ const SigninForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-
+  let logError = useSelector((state) => state.auth.error);
+  console.log("eroorrr", logError);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -40,6 +41,7 @@ const SigninForm = () => {
     validationSchema: LoginSchema,
     onSubmit: (values) => {
       dispatch(login(values));
+
       setTimeout(() => {
         if (Cookies?.get("token")) navigate("/");
       }, 2000);

@@ -1,11 +1,8 @@
 import { Link as RouterLink } from "react-router-dom";
 import { Container, Typography, Link, Box, Divider } from "@mui/material";
 import styled from "@emotion/styled";
-
 import { motion } from "framer-motion";
 import SignupForm from "../components/signupForm";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
 import React from "react";
 
 //////////////////////////////////
@@ -47,10 +44,8 @@ const fadeInUp = {
   },
 };
 function SignUp() {
-  const error = useSelector((state) => state.auth.error);
-  React.useEffect(() => {
-    if (error) toast.error(error);
-  }, [error]);
+  // const error = useSelector((state) => state.auth.error);
+  
   return (
     <>
       <RootStyle>

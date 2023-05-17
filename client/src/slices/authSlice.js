@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
 import axios from "axios";
-
+import { toast } from "react-toastify";
 // Async thunks for login and register
 
 export const login = createAsyncThunk("auth/login", async (credentials) => {
@@ -37,6 +37,7 @@ const authSlice = createSlice({
     user: JSON.parse(localStorage.getItem("userInfo")) || false,
     loading: false,
     error: null,
+    success: false,
   },
   reducers: {
     logout(state) {
@@ -54,11 +55,13 @@ const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
+        state.success = true;
         state.user = action.payload;
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        toast.error(action.error.message);
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
@@ -67,10 +70,13 @@ const authSlice = createSlice({
       .addCase(register.fulfilled, (state) => {
         state.loading = false;
         state.error = null;
+        state.success = true;
+        toast.success("User registered successfully");
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        toast.error(action.error.message);
       });
   },
 });

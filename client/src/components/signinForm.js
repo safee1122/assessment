@@ -31,8 +31,8 @@ const SigninForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  let logError = useSelector((state) => state.auth.error);
-  console.log("eroorrr", logError);
+  const loading = useSelector((state) => state.auth.loading);
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -41,14 +41,14 @@ const SigninForm = () => {
     validationSchema: LoginSchema,
     onSubmit: (values) => {
       dispatch(login(values));
-
+      console.log(errors);
       setTimeout(() => {
         if (Cookies?.get("token")) navigate("/");
       }, 2000);
     },
   });
 
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -107,7 +107,7 @@ const SigninForm = () => {
               size="large"
               type="submit"
               variant="contained"
-              loading={isSubmitting}
+              loading={loading}
             >
               Sign In
             </LoadingButton>

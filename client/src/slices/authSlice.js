@@ -51,6 +51,7 @@ const authSlice = createSlice({
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = false;
       })
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
@@ -61,11 +62,13 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
+        state.success = false;
         toast.error(action.error.message);
       })
       .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = false;
       })
       .addCase(register.fulfilled, (state) => {
         state.loading = false;
@@ -75,6 +78,7 @@ const authSlice = createSlice({
       })
       .addCase(register.rejected, (state, action) => {
         state.loading = false;
+        state.success = false;
         state.error = action.error.message;
         toast.error(action.error.message);
       });

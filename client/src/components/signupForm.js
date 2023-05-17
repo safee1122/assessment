@@ -30,7 +30,7 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
-  const success = useSelector((state) => state.auth.success);
+  const loading = useSelector((state) => state.auth.loading);
 
   const formik = useFormik({
     initialValues: {
@@ -40,15 +40,12 @@ const SignupForm = () => {
       password: "",
     },
     validationSchema: SignupSchema,
-    onSubmit: (values) => {
-      dispatch(register(values));
-    
-        navigate("/login");
-    
+    onSubmit: async (values) => {
+      const res = await dispatch(register(values));
+      if (!res?.error) navigate("/login");
     },
   });
-
-  const { errors, touched, handleSubmit, isSubmitting, getFieldProps } = formik;
+  const { errors, touched, handleSubmit, getFieldProps } = formik;
 
   return (
     <FormikProvider value={formik}>
@@ -131,7 +128,7 @@ const SignupForm = () => {
               size="large"
               type="submit"
               variant="contained"
-              loading={isSubmitting}
+              loading={loading}
             >
               Sign up
             </LoadingButton>

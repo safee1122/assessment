@@ -10,18 +10,12 @@ import SignIn from "./pages/signIn";
 import SignUp from "./pages/signUp";
 import NotFoundPage from "./pages/notFoundPage";
 import ErrorFallback from "./components/errorFallBack";
-import Loader from "./components/loader";
-import { useSelector } from "react-redux";
 import Home from "./pages/home";
 import ProtectedRoute from "./components/protectedRoute";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 function App() {
-  const loading = useSelector((state) => state.app.loading);
-
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <Router>

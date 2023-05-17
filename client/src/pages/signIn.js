@@ -9,9 +9,11 @@ import { Container } from "@mui/material";
 import { validateEmail, validatePassword } from "../utils/validationUtils";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { login } from "../slices/authSlice";
 function SignIn() {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState(false);
@@ -32,10 +34,17 @@ function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+
     console.log({
       email: data.get("email"),
       password: data.get("password"),
     });
+    dispatch(
+      login({
+        email: data.get("email"),
+        password: data.get("password"),
+      })
+    );
   };
 
   return (

@@ -6,7 +6,7 @@ export const validateEmail = (email) => {
 };
 
 export const validatePassword = (password) => {
-  return password.length >= 6;
+  return password.length >= 8;
 };
 
 export const SignupSchema = Yup.object().shape({
@@ -21,5 +21,5 @@ export const SignupSchema = Yup.object().shape({
   email: Yup.string()
     .email("Email must be a valid email address")
     .required("Email is required"),
-  password: Yup.string().required("Password is required"),
+  password: Yup.string().min(7, "Too Short!").required("Password is required"),
 });

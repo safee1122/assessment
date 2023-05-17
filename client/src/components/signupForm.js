@@ -12,6 +12,8 @@ import { LoadingButton } from "@mui/lab";
 import { Icon } from "@iconify/react";
 import { motion } from "framer-motion";
 import { SignupSchema } from "../utils/validationUtils";
+import { register } from "../slices/authSlice";
+import { useDispatch } from "react-redux";
 
 let easing = [0.6, -0.05, 0.01, 0.99];
 const animate = {
@@ -26,7 +28,7 @@ const animate = {
 
 const SignupForm = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
@@ -37,11 +39,9 @@ const SignupForm = () => {
       password: "",
     },
     validationSchema: SignupSchema,
-    onSubmit: () => {
-      console.log("signup");
-      setTimeout(() => {
-        navigate("/", { replace: true });
-      }, 2000);
+    onSubmit: (values) => {
+      dispatch(register(values));
+      navigate("/login");
     },
   });
 

@@ -3,7 +3,7 @@ export const authService = {
   login: async (credentials) => {
     try {
       const response = await axios.post(
-        "https://api.example.com/login",
+        `${process.env.REACT_APP_URL}auth/login`,
         credentials
       );
       return response.data;
@@ -14,7 +14,7 @@ export const authService = {
   register: async (userInfo) => {
     try {
       const response = await axios.post(
-        "https://api.example.com/register",
+        `${process.env.REACT_APP_URL}auth/register`,
         userInfo
       );
       return response.data;

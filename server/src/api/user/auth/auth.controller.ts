@@ -26,7 +26,9 @@ export class AuthController {
   }
 
   @Post('login')
-  private login(@Body() body: LoginDto): Promise<string | never> {
+  private login(
+    @Body() body: LoginDto,
+  ): Promise<{ token: string; user: User } | never> {
     return this.service.login(body);
   }
 

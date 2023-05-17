@@ -1,131 +1,103 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
-import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid";
-import Typography from "@mui/material/Typography";
-import { Container } from "@mui/material";
-import { validateEmail, validatePassword } from "../utils/validationUtils";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { login } from "../slices/authSlice";
+
+import { Link as RouterLink } from "react-router-dom";
+import { Container, Typography, Link, Box, Divider } from "@mui/material";
+import { motion } from "framer-motion";
 import Cookies from "js-cookie";
+import { useFormik } from "formik";
+import { LoginSchema } from "../utils/validationUtils";
+import styled from "@emotion/styled";
+import SigninForm from "../components/signinForm";
+//////////////////////////////////
+const RootStyle = styled("div")({
+  background: "rgb(249, 250, 251)",
+  height: "100vh",
+  display: "grid",
+  placeItems: "center",
+});
+
+const HeadingStyle = styled(Box)({
+  textAlign: "center",
+});
+
+const ContentStyle = styled(Box)({
+  maxWidth: 480,
+  padding: 25,
+  margin: "auto",
+  display: "flex",
+  justifyContent: "center",
+  flexDirection: "column",
+  background: "#fff",
+});
+
+let easing = [0.6, -0.05, 0.01, 0.99];
+const fadeInUp = {
+  initial: {
+    y: 40,
+    opacity: 0,
+    transition: { duration: 0.6, ease: easing },
+  },
+  animate: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      duration: 0.6,
+      ease: easing,
+    },
+  },
+};
+
 function SignIn() {
   const token = Cookies.get("token");
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
 
-  const handleEmailChange = (e) => {
-    const emailValue = e.target.value;
-    setEmail(emailValue);
-    setEmailError(!validateEmail(emailValue));
-  };
-
-  const handlePasswordChange = (e) => {
-    const passwordValue = e.target.value;
-    setPassword(passwordValue);
-    setPasswordError(!validatePassword(passwordValue));
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    dispatch(
-      login({
-        email: data.get("email"),
-        password: data.get("password"),
-      })
-    );
-    navigate("/");
-  };
   React.useEffect(() => {
     if (token) {
       navigate("/");
     }
   }, []);
+
   return (
-    <Container component="main" maxWidth="sm">
-      <Box
-        sx={{
-          boxShadow: 3,
-          borderRadius: 2,
-          px: 4,
-          py: 6,
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            error={emailError}
-            value={email}
-            onChange={handleEmailChange}
-            helperText={emailError ? "Invalid email address" : ""}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            error={passwordError}
-            value={password}
-            autoComplete="current-password"
-            onChange={handlePasswordChange}
-            helperText={
-              passwordError ? "Password must be at least 6 characters" : ""
-            }
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link
-                onClick={(event) => {
-                  event.preventDefault();
-                  navigate("/register");
-                }}
-                variant="body2"
+    <>
+      <RootStyle>
+        <Container maxWidth="sm">
+          <ContentStyle>
+            <HeadingStyle component={motion.div} {...fadeInUp}>
+              <Typography
+                sx={{ color: "text.secondary", mb: 2, fontSize: "1.5rem" }}
               >
-                {"Don't have an account? Sign Up"}
+                Log In
+              </Typography>
+            </HeadingStyle>
+
+            <Divider
+              sx={{ my: 3 }}
+              component={motion.div}
+              {...fadeInUp}
+            ></Divider>
+
+            <SigninForm />
+
+            <Typography
+              component={motion.p}
+              {...fadeInUp}
+              variant="body2"
+              align="center"
+              sx={{ mt: 3 }}
+            >
+              Don't Have an account?{" "}
+              <Link variant="subtitle2" component={RouterLink} to="/register">
+                Register
               </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-    </Container>
+            </Typography>
+          </ContentStyle>
+        </Container>
+      </RootStyle>
+    </>
   );
 }
 
